@@ -22,6 +22,7 @@ defmodule Commonplace.CLI do
     gc                              Find orphaned documents
     serve                         Start the workspace daemon
     ps                            List managed processes
+    fork <path>                     Fork a directory subtree
     signal <topic> <type> [json]  Send a magenta message
   """
 
@@ -84,6 +85,7 @@ defmodule Commonplace.CLI do
       "inspect" -> Commonplace.CLI.InspectCmd.run(data_dir, relative_path, rest)
       "event" -> Commonplace.CLI.Event.run(data_dir, relative_path, rest)
       "gc" -> Commonplace.CLI.GC.run(data_dir, relative_path, rest)
+      "fork" -> Commonplace.CLI.Fork.run(data_dir, relative_path, rest)
       "signal" -> Commonplace.CLI.Signal.run(data_dir, relative_path, rest)
       _ ->
         IO.puts(:stderr, "Unknown command: #{cmd}")
