@@ -50,6 +50,40 @@ defmodule Yelixer.Types.XMLElement do
     doc
   end
 
+  @doc """
+  Re-declares the tag of a named root element after reconstruction.
+
+  The Yjs wire carries the root's Items but not its tag registration, so
+  `Yelixer.Encoding.apply_update/2` reconstructs a named root as `:unknown`.
+  Call this after reconstruction and before `to_string/2` to restore the
+  caller-known tag (CX-lgfg).
+
+  An `:unknown` or absent registration is upgraded to `{:xml_element, tag}`.
+  Re-declaring the same tag is idempotent. Any different existing registration
+  raises `ArgumentError` rather than silently clobbering another type.
+  """
+  @spec reregister_root_tag(Doc.t(), String.t(), String.t()) :: Doc.t()
+  def reregister_root_tag(%Doc{types: types} = doc, type_name, tag)
+      when is_binary(type_name) and is_binary(tag) do
+    type_ref = {:xml_element, tag}
+
+    case Map.fetch(types, type_name) do
+      :error ->
+        %{doc | types: Map.put(types, type_name, type_ref)}
+
+      {:ok, :unknown} ->
+        %{doc | types: Map.put(types, type_name, type_ref)}
+
+      {:ok, ^type_ref} ->
+        doc
+
+      {:ok, existing} ->
+        raise ArgumentError,
+              "cannot re-register named root #{inspect(type_name)} as #{inspect(type_ref)}: " <>
+                "already registered as #{inspect(existing)}"
+    end
+  end
+
   @doc "Read the element's tag from the type registry."
   def tag_name(%Doc{} = doc, type_name) do
     case doc.types[type_name] do
@@ -120,7 +154,10 @@ defmodule Yelixer.Types.XMLElement do
     {origin, right_origin} = find_child_origins(doc.store, children_key, index)
     clock = Doc.mint_clock(doc)
     id = ID.new(doc.client_id, clock)
-    item = Item.new(id, origin, right_origin, {:type, child_type_ref}, {:named, children_key}, nil)
+
+    item =
+      Item.new(id, origin, right_origin, {:type, child_type_ref}, {:named, children_key}, nil)
+
     {:ok, store} = Integrate.integrate(doc.store, item, children_key)
 
     doc = %{doc | store: store}

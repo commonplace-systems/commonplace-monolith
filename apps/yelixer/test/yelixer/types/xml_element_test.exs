@@ -1,7 +1,7 @@
 defmodule Yelixer.Types.XMLElementTest do
   use ExUnit.Case, async: true
 
-  alias Yelixer.{Doc, Types.XMLElement, Types.XMLText}
+  alias Yelixer.{Doc, Encoding, Types.XMLElement, Types.XMLText}
 
   defp new_doc(client_id \\ 1) do
     Doc.new(client_id: client_id)
@@ -11,6 +11,40 @@ defmodule Yelixer.Types.XMLElementTest do
     doc = new_doc()
     doc = XMLElement.new_element(doc, "root", "div")
     assert XMLElement.tag_name(doc, "root") == "div"
+  end
+
+  test "named root tag can be re-declared after an update replay (CX-lgfg)" do
+    source = new_doc()
+    source = XMLElement.new_element(source, "root", "mud")
+    source = XMLElement.insert_child(source, "root", 0, {:element, "room"})
+    source = XMLElement.insert_child(source, "root", 1, {:element, "exit"})
+    expected = XMLElement.to_string(source, "root")
+
+    {:ok, replayed} = Encoding.apply_update(new_doc(2), Encoding.encode_update(source))
+
+    # A named root's tag is not carried on the Yjs wire. Replay therefore
+    # reconstructs the root as :unknown even though child element tags survive.
+    assert XMLElement.to_string(replayed, "root") == "<><room></room><exit></exit></>"
+
+    restored = XMLElement.reregister_root_tag(replayed, "root", "mud")
+    assert XMLElement.to_string(restored, "root") == expected
+
+    # Re-declaring the registration already in place is idempotent.
+    assert XMLElement.reregister_root_tag(restored, "root", "mud") == restored
+  end
+
+  test "re-declaring a named root tag refuses conflicting registrations" do
+    other_element = XMLElement.new_element(new_doc(), "root", "other")
+
+    assert_raise ArgumentError, ~r/already registered as \{:xml_element, "other"\}/, fn ->
+      XMLElement.reregister_root_tag(other_element, "root", "mud")
+    end
+
+    {map_root, :map} = Doc.get_or_create_type(new_doc(), "root", :map)
+
+    assert_raise ArgumentError, ~r/already registered as :map/, fn ->
+      XMLElement.reregister_root_tag(map_root, "root", "mud")
+    end
   end
 
   test "set and get attribute" do
