@@ -2,7 +2,7 @@
 
 ## FRONTIER
 
-> RENDERED 2026-08-27T14:47Z — TRUST UNTIL 2026-08-27T17:33Z. Reading this later?
+> RENDERED 2026-09-03T21:43Z — TRUST UNTIL 2026-09-04T03:43Z. Reading this later?
 > IT IS STALE: do not scope from it. Fallback: bin/state-render, or
 > tix via serve erpc, or git log --oneline --since=<week>.
 
@@ -25,7 +25,7 @@ Ready: **333** · Blocked: **15**
 
 ## IN-FLIGHT
 
-> RENDERED 2026-08-27T14:47Z — TRUST UNTIL 2026-08-27T17:33Z. Reading this later?
+> RENDERED 2026-09-03T21:43Z — TRUST UNTIL 2026-09-04T03:43Z. Reading this later?
 > IT IS STALE: do not scope from it. Fallback: bin/state-render, or
 > tix via serve erpc, or git log --oneline --since=<week>.
 
@@ -33,7 +33,7 @@ Ready: **333** · Blocked: **15**
 
 ## RECENT CLOSES
 
-> RENDERED 2026-08-27T14:47Z — TRUST UNTIL 2026-08-27T17:33Z. Reading this later?
+> RENDERED 2026-09-03T21:43Z — TRUST UNTIL 2026-09-04T03:43Z. Reading this later?
 > IT IS STALE: do not scope from it. Fallback: bin/state-render, or
 > tix via serve erpc, or git log --oneline --since=<week>.
 
@@ -41,7 +41,7 @@ Ready: **333** · Blocked: **15**
 
 ## OPEN-WITH-BLOCKER
 
-> RENDERED 2026-08-27T14:47Z — TRUST UNTIL 2026-08-27T17:33Z. Reading this later?
+> RENDERED 2026-09-03T21:43Z — TRUST UNTIL 2026-09-04T03:43Z. Reading this later?
 > IT IS STALE: do not scope from it. Fallback: bin/state-render, or
 > tix via serve erpc, or git log --oneline --since=<week>.
 
@@ -51,8 +51,8 @@ Ready: **333** · Blocked: **15**
 
 ## TRACKER-TRUST
 
-> RENDERED 2026-08-27T14:47Z — TRUST UNTIL 2026-08-27T17:33Z. Reading this later?
+> RENDERED 2026-09-03T21:43Z — TRUST UNTIL 2026-09-04T03:43Z. Reading this later?
 > IT IS STALE: do not scope from it. Fallback: bin/state-render, or
 > tix via serve erpc, or git log --oneline --since=<week>.
 
-VERDICT: DISCREPANCIES — 149/351 shipped-but-OPEN; 7/636 closed-but-unreferenced SHAPES; scanned 2026-08-27T13:52Z; export as_of 2026-08-27T13:52Z (age 0h 0m)
+VERDICT: DISCREPANCIES — 149/351 shipped-but-OPEN; 7/636 closed-but-unreferenced SHAPES; scanned 2026-09-03T19:42Z; export as_of 2026-09-03T19:42Z (age 0h 0m)
